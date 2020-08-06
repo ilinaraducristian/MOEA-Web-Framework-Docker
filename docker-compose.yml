@@ -1,6 +1,6 @@
 version: "3"
 services:
-  keycloak:
+  authentication_issuer_1:
     image: jboss/keycloak:11.0.0
     ports:
       - "8180:8080"
@@ -10,7 +10,7 @@ services:
       - "KEYCLOAK_IMPORT=/tmp/MOEA-Web-Framework-realm.json"
     volumes:
       - ./MOEA-Web-Framework-realm.json:/tmp/MOEA-Web-Framework-realm.json
-  keycloak_another_issuer:
+  authentication_issuer_2:
     image: jboss/keycloak:11.0.0
     ports:
       - "8280:8080"
@@ -20,3 +20,9 @@ services:
       - "KEYCLOAK_IMPORT=/tmp/MOEA-Web-Framework-realm.json"
     volumes:
       - ./MOEA-Web-Framework-realm.json:/tmp/MOEA-Web-Framework-realm.json
+  cdn:
+    image: cdn
+    ports:
+      - "8070:80"
+    volumes:
+      - ./content:/usr/content
