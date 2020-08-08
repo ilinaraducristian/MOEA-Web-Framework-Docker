@@ -10,17 +10,21 @@ fastify.post("/", async (req, res) => {
   const files = req.raw.files;
   const promises = [];
   for (let key in files) {
+    console.log(files[key].name);
     promises.push(
       fs.writeFile(`/usr/content/${files[key].name}`, files[key].data)
     );
   }
-  Promise.all(promises)
+  if (promises.length == 0) {
+    return { statusCode: 400, message: "No file provided" };
+  }
+  return Promise.all(promises)
     .then(() => {
-      res.send();
+      return { statusCode: 200 };
     })
     .catch((e) => {
       console.log(e);
-      res.code(400).send();
+      return { statusCode: 400 };
     });
 });
 
