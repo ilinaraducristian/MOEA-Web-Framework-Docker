@@ -10,7 +10,6 @@ fastify.post("/", async (req, res) => {
   const files = req.raw.files;
   const promises = [];
   for (let key in files) {
-    console.log(files[key].name);
     promises.push(
       fs.writeFile(`/usr/content/${files[key].name}`, files[key].data)
     );
@@ -29,24 +28,27 @@ fastify.post("/", async (req, res) => {
 });
 
 fastify.get("/:filename", async (req, res) => {
-  fs.readFile(`/usr/content/${req.params.filename}`)
+  return fs
+    .readFile(`/usr/content/${req.params.filename}`)
     .then((value) => {
-      res.send(value);
+      res.code(200).send(value);
+      // return
     })
     .catch((e) => {
       console.log(e);
-      res.code(404).send();
+      return { statusCode: 400 };
     });
 });
 
 fastify.delete("/:filename", async (req, res) => {
-  fs.unlink(`/usr/content/${req.params.filename}`)
+  return fs
+    .unlink(`/usr/content/${req.params.filename}`)
     .then(() => {
-      res.send();
+      return { statusCode: 200 };
     })
     .catch((e) => {
       console.log(e);
-      res.code(404).send();
+      return { statusCode: 404 };
     });
 });
 

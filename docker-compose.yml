@@ -1,28 +1,30 @@
 version: "3"
 services:
-  authentication_issuer_1:
+  authentication_issuer:
     image: jboss/keycloak:11.0.0
     ports:
       - "8180:8080"
     environment:
       - "KEYCLOAK_USER=admin"
-      - "KEYCLOAK_PASSWORD=secure_password"
-      - "KEYCLOAK_IMPORT=/tmp/MOEA-Web-Framework-realm.json"
+      - "KEYCLOAK_PASSWORD=admin"
+      - "KEYCLOAK_IMPORT=/tmp/MOEA-Web-Framework.json"
     volumes:
-      - ./MOEA-Web-Framework-realm.json:/tmp/MOEA-Web-Framework-realm.json
-  authentication_issuer_2:
-    image: jboss/keycloak:11.0.0
-    ports:
-      - "8280:8080"
-    environment:
-      - "KEYCLOAK_USER=admin"
-      - "KEYCLOAK_PASSWORD=secure_password"
-      - "KEYCLOAK_IMPORT=/tmp/MOEA-Web-Framework-realm.json"
-    volumes:
-      - ./MOEA-Web-Framework-realm.json:/tmp/MOEA-Web-Framework-realm.json
+      - ./MOEA-Web-Framework.json:/tmp/MOEA-Web-Framework.json
   cdn:
     image: cdn
     ports:
       - "8070:80"
     volumes:
       - ./content:/usr/content
+  messaging:
+    image: rabbitmq:3.8.6-management-alpine
+    environment:
+      - "RABBITMQ_DEFAULT_USER=guest"
+      - "RABBITMQ_DEFAULT_PASS=guest"
+    ports:
+      - "4369:4369"
+      - "5671:5671"
+      - "5672:5672"
+      - "25672:25672"
+      - "15672:15672"
+      - "15674:15674"
