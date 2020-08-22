@@ -28,3 +28,12 @@ services:
       - "25672:25672"
       - "15672:15672"
       - "15674:15674"
+  # jenkins:
+  #   image: jenkins/jenkins:2.235.5-lts-alpine 
+  #   ports:
+  #     - "8080:8080"
+  #     - "50000:50000"
+  database:
+    image: postgres:12.4-alpine
+    environment:
+      - "POSTGRES_PASSWORD=postgres"
